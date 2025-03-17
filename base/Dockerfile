@@ -1,0 +1,6 @@
+ARG UBUNTU_VERSION=22.04.3
+FROM scratch as ubuntu_base
+ARG UBUNTU_VERSION
+ENV UBUNTU_VERSION=${UBUNTU_VERSION}
+
+ADD ./ubuntu-base-${UBUNTU_VERSION}-base-armhf.tar.gz /
