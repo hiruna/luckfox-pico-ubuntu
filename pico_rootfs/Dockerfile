@@ -1,11 +1,19 @@
 ARG UBUNTU_VERSION=22.04.3
-FROM --platform=linux/arm/v7 ubuntu_base:${UBUNTU_VERSION} AS ubuntu_base
+FROM scratch AS ubuntu_base
+ARG UBUNTU_VERSION
+ENV UBUNTU_VERSION=${UBUNTU_VERSION}
+
+ADD ./ubuntu-base-${UBUNTU_VERSION}-base-armhf.tar.gz /
+
+FROM --platform=linux/arm/v7 ubuntu_base
 LABEL authors="hiruna"
 ARG UBUNTU_VERSION
 ENV UBUNTU_VERSION=${UBUNTU_VERSION}
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Australia/Sydney
+
+ADD ./ubuntu-base-${UBUNTU_VERSION}-base-armhf.tar.gz /
 
 COPY ./apt_packages.txt /tmp/apt_packages.txt
 
