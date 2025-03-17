@@ -26,4 +26,6 @@ RUN groupadd -g 1000 pico && \
 
 RUN usermod -a -G sudo pico
 
+COPY ./fstab /etc/fstab
+
 RUN apt clean && rm -rf /tmp/*

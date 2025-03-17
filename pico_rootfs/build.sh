@@ -37,7 +37,7 @@ UBUNTU_VERSION=22.04.3
 UBUNTU_BASE_TAR_FILENAME="ubuntu-base-${UBUNTU_VERSION}-base-armhf.tar.gz"
 PICO_ROOTFS_IMAGE_TAG="pico_rootfs_ubuntu:${UBUNTU_VERSION}"
 OUTPUT_DIR="./output/$(date '+%Y-%m-%d_%H%M%S')"
-OUTPUT_TAR_GZ_FILENAME="luckfox-ubuntu-${UBUNTU_VERSION}.tar.gz"
+OUTPUT_TAR_FILENAME="luckfox-ubuntu-${UBUNTU_VERSION}.tar"
 
 if [[ ! -f ${OUTPUT_DIR} ]]; then
   mkdir -p "${OUTPUT_DIR}"
@@ -52,9 +52,10 @@ if [[ ! -f ${UBUNTU_BASE_TAR_FILENAME} ]]; then
 fi
 
 docker buildx build --platform linux/arm/v7 -t ${PICO_ROOTFS_IMAGE_TAG} \
-  --build-arg UBUNTU_VERSION=${UBUNTU_VERSION} . --output ${TEMP_ROOTFS_DIR}
+  --build-arg UBUNTU_VERSION=${UBUNTU_VERSION} . --output "type=tar,dest=${OUTPUT_DIR}/${OUTPUT_TAR_FILENAME}"
 
-tar cvzf "${OUTPUT_DIR}/${OUTPUT_TAR_GZ_FILENAME}" ${TEMP_ROOTFS_DIR}
+echo "Compressing ${OUTPUT_DIR}/${OUTPUT_TAR_FILENAME} into ${OUTPUT_DIR}/${OUTPUT_TAR_FILENAME}.gz"
+gzip "${OUTPUT_DIR}/${OUTPUT_TAR_FILENAME}"
 
 rm -rf ${TEMP_ROOTFS_DIR}
 
